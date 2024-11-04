@@ -41,7 +41,6 @@ android {
     }
     buildFeatures {
         viewBinding = true
-        compose = true
     }
 }
 
@@ -49,13 +48,13 @@ dependencies {
 
     //Glide
     implementation (libs.glide)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
     //Dagger Hilt
     implementation(libs.dagger.hilt)
-    implementation(libs.androidx.runtime.android)
     kapt(libs.dagger.hilt.compiler)
 
-    //Firebase Auth
+    //Firebase Firestore
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.storage.ktx)
