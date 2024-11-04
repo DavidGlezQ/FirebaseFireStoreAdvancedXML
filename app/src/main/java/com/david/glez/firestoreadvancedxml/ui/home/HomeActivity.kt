@@ -38,6 +38,12 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun initListeners() {
+        binding.toolbar.tvAddProduct.setOnClickListener {
+
+        }
+    }
+
     private fun renderProducts(products: List<Product>) {
 
     }
