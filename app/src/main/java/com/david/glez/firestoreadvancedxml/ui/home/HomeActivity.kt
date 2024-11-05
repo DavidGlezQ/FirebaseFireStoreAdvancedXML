@@ -1,6 +1,8 @@
 package com.david.glez.firestoreadvancedxml.ui.home
 
+import android.app.Activity
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -15,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.david.glez.firestoreadvancedxml.R
 import com.david.glez.firestoreadvancedxml.databinding.ActivityHomeBinding
 import com.david.glez.firestoreadvancedxml.domain.model.Product
+import com.david.glez.firestoreadvancedxml.ui.addproduct.AddProductActivity
 import com.david.glez.firestoreadvancedxml.ui.home.adapter.ProductsAdapter
 import com.david.glez.firestoreadvancedxml.ui.home.adapter.SpacingDecorator
 import com.david.glez.firestoreadvancedxml.ui.home.adapter.TopProductsAdapter
@@ -29,6 +32,13 @@ class HomeActivity : AppCompatActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var productsAdapter: ProductsAdapter
     private lateinit var topProductsAdapter: TopProductsAdapter
+
+    private val addProductLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                homeViewModel.getData()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +86,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initListeners() {
         binding.toolbar.tvAddProduct.setOnClickListener {
-
+            addProductLauncher.launch(AddProductActivity.create(this))
         }
     }
 

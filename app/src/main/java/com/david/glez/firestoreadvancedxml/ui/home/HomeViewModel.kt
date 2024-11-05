@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(val repository: FirebaseDataBaseService) : ViewModel() {
+class HomeViewModel @Inject constructor(private val repository: FirebaseDataBaseService) : ViewModel() {
 
     private var _uiState: MutableStateFlow<HomeUIState> = MutableStateFlow(HomeUIState())
     val uiState: MutableStateFlow<HomeUIState> = _uiState
@@ -22,7 +22,7 @@ class HomeViewModel @Inject constructor(val repository: FirebaseDataBaseService)
         getData()
     }
 
-    private fun getData() {
+    fun getData() {
         getLastProduct()
         getAllProducts()
     }
