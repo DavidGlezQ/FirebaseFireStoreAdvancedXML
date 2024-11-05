@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
+import com.david.glez.firestoreadvancedxml.R
 import com.david.glez.firestoreadvancedxml.databinding.ActivityHomeBinding
 import com.david.glez.firestoreadvancedxml.domain.model.Product
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +29,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
+        initListeners()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 homeViewModel.uiState.collect { state ->
@@ -53,8 +56,10 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun renderLastProduct(lastProduct: Product?) {
-
+        if (lastProduct == null) return
+        binding.lastProduct.tvTitle.text = lastProduct.title
+        binding.lastProduct.tvDesc.text = lastProduct.description
+        Glide.with(this).load(lastProduct.imageURL).placeholder(R.drawable.ic_placeholder)
+            .into(binding.lastProduct.ivLastProduct)
     }
-
-
 }

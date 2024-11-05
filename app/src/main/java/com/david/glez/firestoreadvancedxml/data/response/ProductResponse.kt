@@ -4,16 +4,16 @@ import com.david.glez.firestoreadvancedxml.domain.model.Product
 
 data class ProductResponse(
     val id: String = "",
-    val imageURL: String = "",
-    val title: String = "",
+    val image: String = "",
+    val name: String = "",
     val description: String = "",
     val price: String = ""
 ) {
     fun toDomain(): Product {
         return Product(
             id = id,
-            imageURL = imageURL,
-            title = title,
+            imageURL = image,
+            title = name,
             description = description,
             price = price
         )

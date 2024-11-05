@@ -22,7 +22,7 @@ class FirebaseDataBaseService @Inject constructor(private val firestore: Firebas
         }
     }
 
-    suspend fun getLastProducts(): Product? {
+    suspend fun getLastProduct(): Product? {
         return firestore.collection(PRODUCTS_PATH).orderBy("id", Query.Direction.DESCENDING)
             .limit(1).get().await().firstOrNull()?.toObject(ProductResponse::class.java)?.toDomain()
     }
