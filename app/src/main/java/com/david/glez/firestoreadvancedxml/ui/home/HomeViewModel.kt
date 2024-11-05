@@ -24,6 +24,16 @@ class HomeViewModel @Inject constructor(val repository: FirebaseDataBaseService)
 
     private fun getData() {
         getLastProduct()
+        getAllProducts()
+    }
+
+    private fun getAllProducts() {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                repository.getAllProducts()
+            }
+            _uiState.update { it.copy(products = response) }
+        }
     }
 
     private fun getLastProduct() {
