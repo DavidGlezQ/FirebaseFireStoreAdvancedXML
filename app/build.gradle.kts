@@ -54,6 +54,9 @@ dependencies {
     implementation(libs.dagger.hilt)
     kapt(libs.dagger.hilt.compiler)
 
+    //Shimmer
+    implementation(libs.shimmer)
+
     //Firebase Firestore
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore.ktx)

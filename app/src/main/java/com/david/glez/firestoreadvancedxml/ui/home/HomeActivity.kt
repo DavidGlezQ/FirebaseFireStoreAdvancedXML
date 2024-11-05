@@ -3,6 +3,7 @@ package com.david.glez.firestoreadvancedxml.ui.home
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -38,6 +39,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
+        initShimmer()
         initListeners()
         initList()
         lifecycleScope.launch {
@@ -49,6 +51,11 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initShimmer() {
+        binding.lastProductShimmer.rootCardShimmer.startShimmer()
+        binding.topProductShimmer.startShimmer()
     }
 
     private fun initList() {
@@ -74,7 +81,11 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun renderProducts(products: List<Product>) {
+        if (products.isEmpty()) return
         productsAdapter.updateProducts(products = products)
+        binding.topProductShimmer.isVisible = false
+        binding.topProductShimmer.stopShimmer()
+
     }
 
     private fun renderTopProducts(topProducts: List<Product>) {
@@ -89,5 +100,7 @@ class HomeActivity : AppCompatActivity() {
             .transform(CenterCrop(), RoundedCorners(16))
             .placeholder(R.drawable.ic_placeholder)
             .into(binding.lastProduct.ivLastProduct)
+        binding.lastProduct.rootCard.isVisible = true
+        binding.lastProductShimmer.rootCardShimmer.stopShimmer()
     }
 }
