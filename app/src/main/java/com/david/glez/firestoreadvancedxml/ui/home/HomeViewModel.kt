@@ -33,6 +33,17 @@ class HomeViewModel @Inject constructor(val repository: FirebaseDataBaseService)
                 repository.getAllProducts()
             }
             _uiState.update { it.copy(products = response) }
+            getTopProducts(response)
+        }
+    }
+
+    private fun getTopProducts(products: List<Product>) {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                repository.getTopProducts()
+            }
+            val topProducts = products.filter { response.contains(it.id) }
+            _uiState.update { it.copy(topProducts = topProducts) }
         }
     }
 

@@ -47,10 +47,10 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/white"
-                    android:text="Last Products"/>
+                    android:text="Top Products"/>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvLastProduct"
+                    android:id="@+id/rvTopProduct"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/tvTopProducts"
@@ -62,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/rvLastProduct"
+                    app:layout_constraintTop_toBottomOf="@id/rvTopProduct"
                     app:layout_constraintStart_toStartOf="parent"
                     android:textSize="20sp"
                     android:textStyle="bold"
