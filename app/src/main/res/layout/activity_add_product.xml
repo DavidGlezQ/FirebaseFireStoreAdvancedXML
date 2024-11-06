@@ -111,6 +111,7 @@
                 android:textColorHint="@color/white" />
 
             <TextView
+                android:id="@+id/tvImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
@@ -139,6 +140,7 @@
                 android:layout_height="200dp"
                 android:layout_margin="16dp"
                 android:visibility="invisible"
+                android:layout_gravity="center"
                 app:cardBackgroundColor="@color/backgroundForm"
                 app:cardCornerRadius="8dp"
                 tools:visibility="visible">

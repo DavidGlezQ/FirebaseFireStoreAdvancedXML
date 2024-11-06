@@ -1,14 +1,26 @@
 package com.david.glez.firestoreadvancedxml.data.network
 
+import android.net.Uri
 import com.david.glez.firestoreadvancedxml.data.response.ProductResponse
 import com.david.glez.firestoreadvancedxml.data.response.TopProductsResponse
 import com.david.glez.firestoreadvancedxml.domain.model.Product
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageMetadata
+import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.storageMetadata
+import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
+import java.util.Date
 import javax.inject.Inject
+import kotlin.coroutines.resume
 
-class FirebaseDataBaseService @Inject constructor(private val firestore: FirebaseFirestore) {
+class FirebaseDataBaseService @Inject constructor(
+    private val firestore: FirebaseFirestore,
+    private val storage: FirebaseStorage
+) {
 
     companion object {
         const val PRODUCTS_PATH = "products"
@@ -30,5 +42,36 @@ class FirebaseDataBaseService @Inject constructor(private val firestore: Firebas
     suspend fun getTopProducts(): List<String> {
         return firestore.collection(MANAGEMENT_PATH).document(TOP_PRODUCTS_PATH).get().await()
             .toObject(TopProductsResponse::class.java)?.ids.orEmpty()
+    }
+
+    suspend fun uploadAndDownloadImage(uri: Uri): String {
+        return suspendCancellableCoroutine { suspendCancellableCoroutine ->
+            val reference = storage.reference.child("downloads/${uri.lastPathSegment}")
+            reference.putFile(uri, createMetaData())
+                .addOnFailureListener {
+                    suspendCancellableCoroutine.resume("")
+                }
+                .addOnSuccessListener {
+                    downloadImage(it, suspendCancellableCoroutine)
+                }
+        }
+    }
+
+    private fun downloadImage(
+        uploadTask: UploadTask.TaskSnapshot,
+        suspendCancellableCoroutine: CancellableContinuation<String>
+    ) {
+        uploadTask.storage.downloadUrl.addOnSuccessListener {
+            suspendCancellableCoroutine.resume(it.toString())
+        }.addOnFailureListener {
+            suspendCancellableCoroutine.resume("")
+        }
+    }
+
+    private fun createMetaData(): StorageMetadata {
+        return storageMetadata {
+            contentType = "image/jpeg"
+            setCustomMetadata("date", Date().time.toString())
+        }
     }
 }

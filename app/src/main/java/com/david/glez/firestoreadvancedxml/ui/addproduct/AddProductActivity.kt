@@ -13,6 +13,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
 import com.david.glez.firestoreadvancedxml.databinding.ActivityAddProductBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -93,8 +94,19 @@ class AddProductActivity : AppCompatActivity() {
                 addProductViewModel.uiState.collect { state ->
                     binding.pbLoading.isVisible = state.isLoading
                     binding.btnAddProduct.isEnabled = state.isValidProduct()
+                    showImage(state.imageURL)
                 }
             }
+        }
+    }
+
+    private fun showImage(imageURL: String) {
+        val emptyImage = imageURL.isEmpty()
+        binding.apply {
+            etImage.isVisible = emptyImage
+            tvImage.isVisible = emptyImage
+            cvProduct.isVisible = !emptyImage
+            Glide.with(this@AddProductActivity).load(imageURL).into(ivProduct)
         }
     }
 }
