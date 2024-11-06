@@ -68,6 +68,18 @@ class AddProductActivity : AppCompatActivity() {
         binding.etImage.setOnClickListener {
             takePicture()
         }
+
+        binding.btnAddProduct.setOnClickListener {
+            addProductViewModel.onAddProduct {
+                setResult(RESULT_OK)
+                finish()
+            }
+        }
+
+        binding.ivBack.setOnClickListener {
+            setResult(RESULT_CANCELED)
+            finish()
+        }
     }
 
     private fun takePicture() {
@@ -95,6 +107,9 @@ class AddProductActivity : AppCompatActivity() {
                     binding.pbLoading.isVisible = state.isLoading
                     binding.btnAddProduct.isEnabled = state.isValidProduct()
                     showImage(state.imageURL)
+                    if (state.error.isNullOrBlank()) {
+
+                    }
                 }
             }
         }

@@ -74,4 +74,31 @@ class FirebaseDataBaseService @Inject constructor(
             setCustomMetadata("date", Date().time.toString())
         }
     }
+
+    suspend fun uploadNewProduct(
+        name: String,
+        description: String,
+        price: String,
+        imageURL: String
+    ): Boolean {
+        val id = generateProductId()
+        val product = hashMapOf(
+            "id" to id,
+            "name" to name,
+            "description" to description,
+            "price" to price,
+            "image" to imageURL
+        )
+        return suspendCancellableCoroutine { suspendCancellableCoroutine ->
+            firestore.collection(PRODUCTS_PATH).document(id).set(product).addOnSuccessListener {
+                suspendCancellableCoroutine.resume(true)
+            }.addOnFailureListener {
+                suspendCancellableCoroutine.resume(false)
+            }
+        }
+    }
+
+    private fun generateProductId(): String {
+        return Date().time.toString()
+    }
 }

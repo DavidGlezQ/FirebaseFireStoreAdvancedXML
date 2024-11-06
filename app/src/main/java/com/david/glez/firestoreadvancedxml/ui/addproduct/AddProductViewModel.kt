@@ -46,14 +46,37 @@ class AddProductViewModel @Inject constructor(private val firebaseRepository: Fi
     private fun showLoading(show: Boolean) {
         _uiState.update { it.copy(isLoading = show) }
     }
-}
 
-data class AddProductsUIState(
-    val name: String = "",
-    val description: String = "",
-    val price: String = "",
-    val imageURL: String = "",
-    val isLoading: Boolean = false
-) {
-    fun isValidProduct() = name.isNotBlank() && description.isNotBlank() && price.isNotBlank()
+    fun onAddProduct(onSuccessProduct: () -> Unit) {
+        viewModelScope.launch {
+            showLoading(true)
+            val result = withContext(Dispatchers.IO) {
+                firebaseRepository.uploadNewProduct(
+                    name = _uiState.value.name,
+                    description = _uiState.value.description,
+                    price = _uiState.value.price,
+                    imageURL = _uiState.value.imageURL
+                )
+            }
+            if (result) {
+                onSuccessProduct()
+            } else {
+                _uiState.update {
+                    it.copy(error = "An error has been occurred")
+                }
+                showLoading(false)
+            }
+        }
+    }
+
+    data class AddProductsUIState(
+        val name: String = "",
+        val description: String = "",
+        val price: String = "",
+        val imageURL: String = "",
+        val isLoading: Boolean = false,
+        val error: String? = null
+    ) {
+        fun isValidProduct() = name.isNotBlank() && description.isNotBlank() && price.isNotBlank()
+    }
 }
